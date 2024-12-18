@@ -90,40 +90,10 @@ const main = async () => {
             if(!inOrder) break;
         }
 
-        function dfs(node, depth, visited){
-            if(visited.has(node)) return false;
-            visited.add(node);
-
-            //console.log("Update idx: " + i + " | ")
-            if(depth == pages.length-1){
-                return true;
-            }
-
-            for(let i = 0; i < pages.length; i++){
-                if(!visited.has(pages[i])){
-                    if(!g[node].has(pages[i])){
-                        const flag = dfs(pages[i], depth + 1, new Set(visited));
-                        if(flag){
-                            if(depth == Math.floor( (pages.length-1) / 2)){
-                                sum += node;
-                                inOrder = true;
-                            }
-
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
+        
         if(!inOrder){
-            for(let i = 0; i < pages.length; i++){
-                dfs(pages[i], 0, new Set());
-
-                if(inOrder) break;
-            }
+            pages = pages.sort((a, b) => g[a].has(b) ? 1 : g[b].has(a) ? -1 : 0)
+            sum += pages[Math.floor( (pages.length-1) / 2)];
         }
     }
 
